@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "name": "Benchmark 1: Ohm's Law DC",
+  "description": "DC circuit with 10V source and 1k resistor demonstrating I = V/R = 10mA.",
+  "created": "2026-10-19T12:00:00Z",
+  "modified": "2026-10-19T12:00:00Z",
+  "simulation": {
+    "analysisType": "operatingPoint",
+    "dcOp": true
+  },
+  "circuit": {
+    "components": [
+      {
+        "id": "v1",
+        "designator": "V1",
+        "componentType": "vdc",
+        "value": "10V",
+        "x": 200,
+        "y": 200,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      },
+      {
+        "id": "r1",
+        "designator": "R1",
+        "componentType": "resistor",
+        "value": "1k",
+        "x": 320,
+        "y": 160,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      },
+      {
+        "id": "gnd",
+        "designator": "0",
+        "componentType": "ground",
+        "value": "0",
+        "x": 200,
+        "y": 260,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      }
+    ],
+    "wires": [
+      {
+        "id": "w1",
+        "points": [
+          { "x": 200, "y": 160 },
+          { "x": 280, "y": 160 }
+        ]
+      },
+      {
+        "id": "w2",
+        "points": [
+          { "x": 360, "y": 160 },
+          { "x": 400, "y": 160 },
+          { "x": 400, "y": 240 },
+          { "x": 200, "y": 240 }
+        ]
+      }
+    ],
+    "junctions": [
+      { "x": 200, "y": 240 }
+    ],
+    "netLabels": []
+  }
+}

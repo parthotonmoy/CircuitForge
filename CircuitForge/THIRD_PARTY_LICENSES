@@ -1,0 +1,41 @@
+# Third-Party Licenses and Attributions
+
+CircuitForge incorporates or links to the following third-party open-source components:
+
+---
+
+## 1. ngspice
+
+- **Component**: ngspice circuit simulator (version 38, 64-bit Windows binary)
+- **Website**: https://ngspice.sourceforge.io/
+- **License**: Modified BSD License / LGPL (compatible with redistribution)
+- **Copyright**:
+  - Copyright (c) 1985-1994 The Regents of the University of California.
+  - Copyright (c) 2001-2022 The ngspice team.
+- **Redistribution Terms**: The software is provided "as is", without warranty of any kind. Redistribution and use in binary forms are permitted provided that the copyright notices and conditions are maintained.
+
+---
+
+## 2. Tauri
+
+- **Component**: Tauri v2 application framework
+- **Website**: https://tauri.app/
+- **License**: MIT / Apache-2.0
+- **Copyright**: Copyright (c) 2019-2026 Tauri Programme within The Commons Conservancy.
+
+---
+
+## 3. Rust Dependencies
+
+- `serde`, `serde_json`: MIT / Apache-2.0
+- `thiserror`: MIT / Apache-2.0
+- `tempfile`: MIT / Apache-2.0
+- `chrono`: MIT / Apache-2.0
+- `tauri-plugin-dialog`, `tauri-plugin-log`: MIT / Apache-2.0
+
+---
+
+## 4. Frontend Dependencies
+
+- `vite`: MIT License (Copyright (c) 2019-present Evan You & Vite Contributors)
+- `typescript`: Apache-2.0 License (Copyright (c) Microsoft Corporation)

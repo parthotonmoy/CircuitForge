@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "1.0.0",
+  "name": "Benchmark 3: RC Step Transient",
+  "description": "RC circuit with 10V step response (tau = 1ms) charging toward 10V.",
+  "created": "2026-10-19T12:00:00Z",
+  "modified": "2026-10-19T12:00:00Z",
+  "simulation": {
+    "analysisType": "transient",
+    "transient": {
+      "step": "10u",
+      "stop": "5m",
+      "start": "0",
+      "maxStep": "10u"
+    },
+    "dcOp": true
+  },
+  "circuit": {
+    "components": [
+      {
+        "id": "v1",
+        "designator": "V1",
+        "componentType": "vpulse",
+        "value": "10V",
+        "x": 160,
+        "y": 200,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {
+          "v1": "0",
+          "v2": "10",
+          "td": "0",
+          "tr": "1u",
+          "tf": "1u",
+          "pw": "10m",
+          "per": "20m"
+        }
+      },
+      {
+        "id": "r1",
+        "designator": "R1",
+        "componentType": "resistor",
+        "value": "1k",
+        "x": 260,
+        "y": 160,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      },
+      {
+        "id": "c1",
+        "designator": "C1",
+        "componentType": "capacitor",
+        "value": "1u",
+        "x": 360,
+        "y": 200,
+        "rotation": 90,
+        "mirror": false,
+        "properties": {}
+      },
+      {
+        "id": "gnd",
+        "designator": "0",
+        "componentType": "ground",
+        "value": "0",
+        "x": 160,
+        "y": 260,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      }
+    ],
+    "wires": [
+      {
+        "id": "w1",
+        "points": [
+          { "x": 160, "y": 160 },
+          { "x": 220, "y": 160 }
+        ]
+      },
+      {
+        "id": "w2",
+        "points": [
+          { "x": 300, "y": 160 },
+          { "x": 360, "y": 160 }
+        ]
+      },
+      {
+        "id": "w3",
+        "points": [
+          { "x": 360, "y": 240 },
+          { "x": 160, "y": 240 }
+        ]
+      }
+    ],
+    "junctions": [
+      { "x": 160, "y": 240 }
+    ],
+    "netLabels": [
+      { "name": "VOUT", "x": 360, "y": 160 }
+    ]
+  }
+}

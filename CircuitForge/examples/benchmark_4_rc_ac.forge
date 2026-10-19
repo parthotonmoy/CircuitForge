@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "1.0.0",
+  "name": "Benchmark 4: RC Low-Pass AC",
+  "description": "RC low-pass filter with AC 1.0 source and cutoff frequency fc ≈ 1 kHz.",
+  "created": "2026-10-19T12:00:00Z",
+  "modified": "2026-10-19T12:00:00Z",
+  "simulation": {
+    "analysisType": "ac",
+    "ac": {
+      "sweepType": "decade",
+      "points": 50,
+      "startFreq": "10",
+      "stopFreq": "1Meg"
+    },
+    "dcOp": true
+  },
+  "circuit": {
+    "components": [
+      {
+        "id": "v1",
+        "designator": "V1",
+        "componentType": "vac",
+        "value": "AC 1.0 0.0",
+        "x": 160,
+        "y": 200,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      },
+      {
+        "id": "r1",
+        "designator": "R1",
+        "componentType": "resistor",
+        "value": "1k",
+        "x": 260,
+        "y": 160,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      },
+      {
+        "id": "c1",
+        "designator": "C1",
+        "componentType": "capacitor",
+        "value": "159.155n",
+        "x": 360,
+        "y": 200,
+        "rotation": 90,
+        "mirror": false,
+        "properties": {}
+      },
+      {
+        "id": "gnd",
+        "designator": "0",
+        "componentType": "ground",
+        "value": "0",
+        "x": 160,
+        "y": 260,
+        "rotation": 0,
+        "mirror": false,
+        "properties": {}
+      }
+    ],
+    "wires": [
+      {
+        "id": "w1",
+        "points": [
+          { "x": 160, "y": 160 },
+          { "x": 220, "y": 160 }
+        ]
+      },
+      {
+        "id": "w2",
+        "points": [
+          { "x": 300, "y": 160 },
+          { "x": 360, "y": 160 }
+        ]
+      },
+      {
+        "id": "w3",
+        "points": [
+          { "x": 360, "y": 240 },
+          { "x": 160, "y": 240 }
+        ]
+      }
+    ],
+    "junctions": [
+      { "x": 160, "y": 240 }
+    ],
+    "netLabels": [
+      { "name": "VOUT", "x": 360, "y": 160 }
+    ]
+  }
+}

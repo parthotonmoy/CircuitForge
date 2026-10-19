@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CircuitForge - SPICE Circuit Workbench</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app-container">
+      <!-- Command Bar -->
+      <header id="app-header">
+        <div class="header-left">
+          <div class="brand-title">
+            <span>CircuitForge</span>
+            <span class="brand-badge">SPICE</span>
+          </div>
+          <button id="btn-new" title="New Circuit (Ctrl+N)">New</button>
+          <button id="btn-open" title="Open Project (Ctrl+O)">Open</button>
+          <button id="btn-save" title="Save Project (Ctrl+S)">Save</button>
+          <select id="select-example" title="Load Benchmark Circuits">
+            <option value="" disabled selected>Examples...</option>
+            <option value="ex-ohm">Benchmark 1: Ohm's Law (DC)</option>
+            <option value="ex-divider">Benchmark 2: Voltage Divider</option>
+            <option value="ex-rc-step">Benchmark 3: RC Step Transient</option>
+            <option value="ex-rc-ac">Benchmark 4: RC Low-Pass AC</option>
+          </select>
+        </div>
+
+        <div class="header-center">
+          <button id="btn-run" class="primary" title="Run SPICE Simulation (F5)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Run Simulation</span>
+          </button>
+          <button id="btn-validate" title="Validate Circuit Rules">Validate</button>
+        </div>
+
+        <div class="header-right">
+          <button id="btn-wire" title="Wire Tool (W)">Wire Tool</button>
+          <button id="btn-rotate" title="Rotate Selected Component (R)">Rotate</button>
+          <button id="btn-delete" title="Delete Selection (Del)">Delete</button>
+          <button id="btn-export-csv" title="Export Waveforms to CSV">Export CSV</button>
+        </div>
+      </header>
+
+      <!-- Main Body -->
+      <div id="workspace-body">
+        <!-- Component Library Palette -->
+        <aside id="component-palette">
+          <div class="panel-header">Components</div>
+          
+          <div class="palette-category">Passives</div>
+          <div class="palette-grid">
+            <div class="palette-item" data-type="resistor" title="Resistor (R)">
+              <svg viewBox="0 0 40 20"><path d="M 2 10 L 8 10 L 11 4 L 17 16 L 23 4 L 29 16 L 32 10 L 38 10" stroke-linecap="round"/></svg>
+              <span>Resistor</span>
+            </div>
+            <div class="palette-item" data-type="potentiometer" title="Potentiometer (POT)">
+              <svg viewBox="0 0 40 20">
+                <path d="M 2 13 L 8 13 L 11 8 L 17 18 L 23 8 L 29 18 L 32 13 L 38 13"/>
+                <path d="M 20 2 L 20 9 M 17 6 L 20 9 L 23 6" stroke="#58A6FF"/>
+              </svg>
+              <span>Potentiometer</span>
+            </div>
+            <div class="palette-item" data-type="capacitor" title="Capacitor (C)">
+              <svg viewBox="0 0 40 20"><path d="M 2 10 L 16 10 M 16 3 L 16 17 M 24 3 L 24 17 M 24 10 L 38 10"/></svg>
+              <span>Capacitor</span>
+            </div>
+            <div class="palette-item" data-type="inductor" title="Inductor (L)">
+              <svg viewBox="0 0 40 20"><path d="M 2 10 L 8 10 A 5 5 0 0 1 16 10 A 5 5 0 0 1 24 10 A 5 5 0 0 1 32 10 L 38 10"/></svg>
+              <span>Inductor</span>
+            </div>
+            <div class="palette-item" data-type="ground" title="Ground (GND / 0V)">
+              <svg viewBox="0 0 40 20"><path d="M 20 2 L 20 9 M 8 9 L 32 9 M 12 13 L 28 13 M 16 17 L 24 17"/></svg>
+              <span>Ground</span>
+            </div>
+            <div class="palette-item" data-type="switch" title="SPST Switch (Contact)">
+              <svg viewBox="0 0 40 20">
+                <line x1="2" y1="10" x2="14" y2="10"/>
+                <circle cx="15" cy="10" r="1.5" fill="#0550AE"/>
+                <line x1="15" y1="10" x2="27" y2="4" stroke-width="2"/>
+                <circle cx="27" cy="10" r="1.5" fill="#0550AE"/>
+                <line x1="27" y1="10" x2="38" y2="10"/>
+              </svg>
+              <span>Switch</span>
+            </div>
+            <div class="palette-item" data-type="transformer" title="Coupled Inductor / Transformer">
+              <svg viewBox="0 0 40 20">
+                <path d="M 8 4 A 4 4 0 0 1 8 10 A 4 4 0 0 1 8 16"/>
+                <line x1="18" y1="2" x2="18" y2="18"/>
+                <line x1="22" y1="2" x2="22" y2="18"/>
+                <path d="M 32 4 A 4 4 0 0 0 32 10 A 4 4 0 0 0 32 16"/>
+              </svg>
+              <span>Transformer</span>
+            </div>
+          </div>
+
+          <div class="palette-category">Power Sources</div>
+          <div class="palette-grid">
+            <div class="palette-item" data-type="vdc" title="DC Voltage Source (Battery / Supply)">
+              <!-- Crisp IEEE battery/DC supply cell symbol -->
+              <svg viewBox="0 0 40 24">
+                <line x1="2" y1="12" x2="16" y2="12"/>
+                <line x1="16" y1="4" x2="16" y2="20" stroke-width="2.5"/>
+                <line x1="24" y1="7" x2="24" y2="17" stroke-width="3.5"/>
+                <line x1="24" y1="12" x2="38" y2="12"/>
+                <!-- Plus and minus signs -->
+                <text x="11" y="8" font-size="8" fill="#58A6FF" font-family="'Times New Roman', serif" stroke="none" text-anchor="middle">+</text>
+                <text x="29" y="8" font-size="8" fill="#8B949E" font-family="'Times New Roman', serif" stroke="none" text-anchor="middle">-</text>
+              </svg>
+              <span>VDC</span>
+            </div>
+            <div class="palette-item" data-type="vsin" title="AC Sine Voltage Source">
+              <svg viewBox="0 0 40 24">
+                <line x1="2" y1="12" x2="11" y2="12"/>
+                <circle cx="20" cy="12" r="9"/>
+                <path d="M 14 12 Q 17 6, 20 12 T 26 12" stroke-width="2"/>
+                <line x1="29" y1="12" x2="38" y2="12"/>
+              </svg>
+              <span>VSin (AC)</span>
+            </div>
+            <div class="palette-item" data-type="vpulse" title="Pulse Generator Source">
+              <svg viewBox="0 0 40 24">
+                <line x1="2" y1="12" x2="11" y2="12"/>
+                <circle cx="20" cy="12" r="9"/>
+                <path d="M 14 15 L 17 15 L 17 9 L 23 9 L 23 15 L 26 15" stroke-width="1.8"/>
+                <line x1="29" y1="12" x2="38" y2="12"/>
+              </svg>
+              <span>VPulse</span>
+            </div>
+            <div class="palette-item" data-type="idc" title="DC Current Source">
+              <svg viewBox="0 0 40 24">
+                <line x1="2" y1="12" x2="11" y2="12"/>
+                <circle cx="20" cy="12" r="9"/>
+                <line x1="14" y1="12" x2="26" y2="12" stroke-width="2"/>
+                <path d="M 22 9 L 26 12 L 22 15" stroke-width="2"/>
+                <line x1="29" y1="12" x2="38" y2="12"/>
+              </svg>
+              <span>IDC Source</span>
+            </div>
+            <div class="palette-item" data-type="iac" title="AC Current Source">
+              <svg viewBox="0 0 40 24">
+                <line x1="2" y1="12" x2="11" y2="12"/>
+                <circle cx="20" cy="12" r="9"/>
+                <path d="M 14 12 Q 17 6, 20 12 T 26 12" stroke-width="1.8"/>
+                <line x1="29" y1="12" x2="38" y2="12"/>
+              </svg>
+              <span>IAC Source</span>
+            </div>
+          </div>
+
+          <div class="palette-category">Semiconductors</div>
+          <div class="palette-grid">
+            <div class="palette-item" data-type="diode" title="Rectifier Diode">
+              <svg viewBox="0 0 40 20"><path d="M 2 10 L 15 10 M 25 10 L 38 10 M 15 4 L 15 16 L 25 10 Z M 25 4 L 25 16"/></svg>
+              <span>Diode</span>
+            </div>
+            <div class="palette-item" data-type="zenerDiode" title="Zener Diode (Voltage Regulator)">
+              <svg viewBox="0 0 40 20">
+                <path d="M 2 10 L 15 10 M 25 10 L 38 10 M 15 4 L 15 16 L 25 10 Z"/>
+                <path d="M 22 4 L 25 4 L 25 16 L 28 16"/>
+              </svg>
+              <span>Zener</span>
+            </div>
+            <div class="palette-item" data-type="led" title="Light Emitting Diode">
+              <svg viewBox="0 0 40 20">
+                <path d="M 2 10 L 15 10 M 25 10 L 38 10 M 15 4 L 15 16 L 25 10 Z M 25 4 L 25 16"/>
+                <path d="M 21 3 L 26 1 M 25 1 L 26 1 L 26 2"/>
+                <path d="M 25 6 L 30 4 M 29 4 L 30 4 L 30 5"/>
+              </svg>
+              <span>LED</span>
+            </div>
+            <div class="palette-item" data-type="vreg" title="Voltage Regulator (5V Fixed)">
+              <svg viewBox="0 0 40 20">
+                <rect x="8" y="4" width="24" height="12" rx="1"/>
+                <line x1="2" y1="10" x2="8" y2="10"/>
+                <line x1="32" y1="10" x2="38" y2="10"/>
+                <line x1="20" y1="16" x2="20" y2="20"/>
+                <text x="20" y="13" font-size="7" fill="#0550AE" font-family="'Times New Roman', serif" font-weight="bold" stroke="none" text-anchor="middle">REG</text>
+              </svg>
+              <span>Voltage Reg</span>
+            </div>
+            <div class="palette-item" data-type="bjtNpn" title="NPN Bipolar Transistor">
+              <svg viewBox="0 0 40 20"><circle cx="20" cy="10" r="8"/><path d="M 12 10 L 17 10 M 17 6 L 17 14 M 17 8 L 24 4 M 17 12 L 24 16"/></svg>
+              <span>BJT NPN</span>
+            </div>
+            <div class="palette-item" data-type="bjtPnp" title="PNP Bipolar Transistor">
+              <svg viewBox="0 0 40 20">
+                <circle cx="20" cy="10" r="8"/>
+                <path d="M 12 10 L 17 10 M 17 6 L 17 14 M 17 8 L 24 4 M 17 12 L 24 16"/>
+                <!-- Inward arrow on emitter -->
+                <path d="M 20 6 L 18 10 L 22 9"/>
+              </svg>
+              <span>BJT PNP</span>
+            </div>
+            <div class="palette-item" data-type="nmos" title="N-Channel MOSFET">
+              <svg viewBox="0 0 40 20"><path d="M 8 10 L 14 10 M 14 5 L 14 15 M 18 5 L 18 15 M 18 6 L 26 6 M 18 14 L 26 14"/></svg>
+              <span>NMOS</span>
+            </div>
+            <div class="palette-item" data-type="pmos" title="P-Channel MOSFET">
+              <svg viewBox="0 0 40 20">
+                <circle cx="16" cy="10" r="2"/>
+                <path d="M 6 10 L 14 10 M 18 5 L 18 15 M 21 5 L 21 15 M 21 6 L 28 6 M 21 14 L 28 14"/>
+              </svg>
+              <span>PMOS</span>
+            </div>
+            <div class="palette-item" data-type="opAmp" title="Operational Amplifier">
+              <svg viewBox="0 0 40 20"><path d="M 8 3 L 8 17 L 26 10 Z M 2 6 L 8 6 M 2 14 L 8 14 M 26 10 L 36 10"/></svg>
+              <span>Op-Amp</span>
+            </div>
+          </div>
+
+          <div class="palette-category">Instruments & Probes</div>
+          <div class="palette-grid">
+            <div class="palette-item" data-type="probeVoltagePos" title="Positive Voltage Probe (V+) - Place on (+) test point">
+              <svg viewBox="0 0 40 24">
+                <line x1="8" y1="20" x2="16" y2="12" stroke="#59636E" stroke-width="2"/>
+                <line x1="16" y1="12" x2="22" y2="6" stroke="#CF222E" stroke-width="3"/>
+                <circle cx="27" cy="7" r="6" stroke="#CF222E" fill="#FFEBE9" stroke-width="1.5"/>
+                <text x="27" y="10" font-size="9" fill="#CF222E" font-family="'Times New Roman', serif" font-weight="bold" stroke="none" text-anchor="middle">+</text>
+              </svg>
+              <span>Probe (V+)</span>
+            </div>
+            <div class="palette-item" data-type="probeVoltageNeg" title="Negative Voltage Reference Probe (V-) - Place on (-) reference node">
+              <svg viewBox="0 0 40 24">
+                <line x1="8" y1="20" x2="16" y2="12" stroke="#59636E" stroke-width="2"/>
+                <line x1="16" y1="12" x2="22" y2="6" stroke="#0550AE" stroke-width="3"/>
+                <circle cx="27" cy="7" r="6" stroke="#0550AE" fill="#DDF4FF" stroke-width="1.5"/>
+                <text x="27" y="10" font-size="10" fill="#0550AE" font-family="'Times New Roman', serif" font-weight="bold" stroke="none" text-anchor="middle">-</text>
+              </svg>
+              <span>Probe (V-)</span>
+            </div>
+            <div class="palette-item" data-type="probeCurrent" title="Oscilloscope Current Probe (Insert inline to plot branch current)">
+              <svg viewBox="0 0 40 20">
+                <circle cx="20" cy="10" r="7" stroke="#9A6700" fill="rgba(154, 103, 0, 0.12)"/>
+                <text x="20" y="14" font-size="9" fill="#9A6700" font-family="'Times New Roman', serif" font-weight="bold" stroke="none" text-anchor="middle">I</text>
+              </svg>
+              <span>Current Probe</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Schematic Canvas Viewport -->
+        <main id="canvas-container">
+          <canvas id="schematic-canvas"></canvas>
+          <div id="canvas-overlay">
+            <button id="btn-zoom-fit">Fit View</button>
+            <button id="btn-zoom-in">+</button>
+            <button id="btn-zoom-out">-</button>
+          </div>
+        </main>
+
+        <!-- Properties & Simulation Profile Inspector -->
+        <aside id="inspector-panel">
+          <div class="panel-header">Component Inspector</div>
+          <div id="component-props" class="property-group">
+            <div class="property-row">
+              <span class="property-label">Designator</span>
+              <input id="prop-designator" class="property-input tabular" type="text" placeholder="e.g. R1" />
+            </div>
+            <div class="property-row">
+              <span class="property-label">Value</span>
+              <input id="prop-value" class="property-input tabular" type="text" placeholder="e.g. 10k" />
+            </div>
+            <div class="property-row">
+              <span class="property-label">Rotation</span>
+              <input id="prop-rotation" class="property-input tabular" type="text" readonly />
+            </div>
+          </div>
+
+          <div class="panel-header">Simulation Setup</div>
+          <div class="property-group">
+            <div class="property-row">
+              <span class="property-label">Analysis Type</span>
+              <select id="sim-type" class="property-input">
+                <option value="transient">Transient</option>
+                <option value="operatingPoint">DC Bias (.OP)</option>
+                <option value="ac">AC Frequency (.AC)</option>
+              </select>
+            </div>
+            <div id="sim-tran-options">
+              <div class="property-row">
+                <span class="property-label">Stop Time</span>
+                <input id="sim-tran-stop" class="property-input tabular" type="text" value="5m" />
+              </div>
+              <div class="property-row">
+                <span class="property-label">Step Time</span>
+                <input id="sim-tran-step" class="property-input tabular" type="text" value="10u" />
+              </div>
+            </div>
+            <div id="sim-ac-options" style="display: none;">
+              <div class="property-row">
+                <span class="property-label">Start Frequency</span>
+                <input id="sim-ac-start" class="property-input tabular" type="text" value="10" />
+              </div>
+              <div class="property-row">
+                <span class="property-label">Stop Frequency</span>
+                <input id="sim-ac-stop" class="property-input tabular" type="text" value="1Meg" />
+              </div>
+              <div class="property-row">
+                <span class="property-label">Points/Decade</span>
+                <input id="sim-ac-points" class="property-input tabular" type="number" value="50" />
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Waveform & Diagnostics Deck -->
+      <footer id="analysis-deck">
+        <div class="deck-tabs">
+          <button class="deck-tab active" data-tab="waveforms">Waveforms & Oscilloscope</button>
+          <button class="deck-tab" data-tab="op">DC Operating Points</button>
+          <button class="deck-tab" data-tab="netlist">SPICE Netlist</button>
+          <button class="deck-tab" data-tab="console">Diagnostics Console</button>
+        </div>
+        <div class="deck-content">
+          <div id="tab-waveforms" style="width: 100%; height: 100%; position: relative; display: flex; flex-direction: column;">
+            <div id="scope-toolbar" style="height: 32px; background-color: var(--surface-header); border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Channels:</span>
+                <div id="scope-channel-pills" style="display: flex; gap: 6px;"></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="scope-cursor-readout" class="tabular" style="color: var(--schematic-wire); font-family: var(--font-mono); font-size: 11px; padding: 2px 8px; background: rgba(72, 208, 176, 0.1); border-radius: 3px; border: 1px solid rgba(72, 208, 176, 0.2);">Cursor: Move mouse over plot</span>
+                <button id="btn-scope-autoscale" style="padding: 2px 8px; font-size: 11px;" title="Reset and autoscale axes to fit all traces">Autoscale</button>
+                <button id="btn-scope-mode" style="padding: 2px 8px; font-size: 11px;" title="Toggle between Linear and Logarithmic grid">Grid: Linear</button>
+              </div>
+            </div>
+            <div style="flex: 1; position: relative; overflow: hidden;">
+              <canvas id="plot-canvas"></canvas>
+            </div>
+          </div>
+          <div id="tab-op" style="display: none; width: 100%; height: 100%; overflow: auto; padding: 12px;">
+            <table id="op-table" style="width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-muted); text-align: left;">
+                  <th style="padding: 6px;">Node / Device Variable</th>
+                  <th style="padding: 6px;">Bias Value</th>
+                </tr>
+              </thead>
+              <tbody id="op-table-body">
+                <tr><td colspan="2" style="padding: 10px; color: var(--text-muted);">Run simulation to compute DC operating bias.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="tab-netlist" style="display: none; width: 100%; height: 100%;">
+            <pre id="netlist-viewer"></pre>
+          </div>
+          <div id="tab-console" style="display: none; width: 100%; height: 100%;">
+            <pre id="console-viewer">CircuitForge Ready. Engine: ngspice-38 (Verified)</pre>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Bottom Status Bar -->
+      <div id="app-statusbar">
+        <div class="status-item">
+          <div id="status-engine-dot" class="status-dot"></div>
+          <span id="status-engine-text">Engine: ngspice-38</span>
+        </div>
+        <div class="status-item">
+          <span id="status-message">Ready</span>
+        </div>
+        <div class="status-item">
+          <span id="status-grid" class="tabular">Grid: 20px | Zoom: 100%</span>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
